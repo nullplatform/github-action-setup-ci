@@ -22,9 +22,9 @@ inputs:
     description: The ID of the build launched by the CI
     required: false
 outputs:
-  application-id: 
+  application-id:
     description: The ID of the application being set up
-    value: ${{ steps.ci-setup.outputs.application-id }}  
+    value: ${{ steps.ci-setup.outputs.application-id }}
   application-name:
     description: The name of the application being set up
     value: ${{ steps.ci-setup.outputs.application-name }}
@@ -33,7 +33,7 @@ outputs:
     value: ${{ steps.ci-setup.outputs.application-path }}
   build-id:
     description: The ID of the build launched by the CI
-    value: ${{ steps.ci-setup.outputs.build-id }} 
+    value: ${{ steps.ci-setup.outputs.build-id }}
   applications:
     description: The applications to being set up
     value: ${{ steps.ci-setup-multiple.outputs.applications }}
@@ -49,13 +49,13 @@ runs:
     - if: ${{ inputs.monorepo == 'true' }}
       name: Setup CI for multiples application
       id: ci-setup-multiple
-      uses: nullplatform/github-action-setup-ci/multi-application@main
+      uses: nullplatform/github-action-setup-ci/multi-application@v1
       with:
         applications-path: ${{ inputs.applications-path }}
     - if: ${{ inputs.monorepo != 'true' }}
       name: Setup CI for application
       id: ci-setup
-      uses: nullplatform/github-action-setup-ci/single-application@main
+      uses: nullplatform/github-action-setup-ci/single-application@v1
       with:
         status: ${{ inputs.status }}
         build-id: ${{ inputs.build-id }}

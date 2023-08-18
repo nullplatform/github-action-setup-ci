@@ -26,13 +26,24 @@ chmod 400 ./update-version.sh
 
 You can now consume the action by referencing the v1 branch
 
+### Using 
+
 ```yaml
-uses: nullplatform/github-action-setup-ci@v1
-with:
-  build-id: 123456
-  type: docker-image
-  # these are the default values
-  # path: .
-  # output-path: build
-  # name: main
+- name: Start Nullplatform CI
+  id: setup-ci
+  uses: nullplatform/github-action-setup-ci@v1
+  with:
+  api-key: ${{ secrets.NULLPLATFORM_API_KEY }}
+
+##
+## Other steps
+##
+
+- name: End Nullplatform CI
+  if: ${{ always() }}
+  id: end-setup-ci
+  uses: nullplatform/github-action-setup-ci@main
+  with:
+    build-id: ${{ steps.setup-ci.outputs.build-id }}
+    status: ${{ (steps.push-asset.conclusion == 'failure' || steps.push-asset.conclusion == 'cancelled') && 'failed' || 'successful' }}
 ```
