@@ -1,0 +1,55 @@
+name: Setup CI Single Application
+description: This is a GitHub Action designed to automate the CI setup for a single repository application
+inputs:
+  status:
+    description: The status to set for the CI setup
+    required: false
+  build-id:
+    description: The ID of the build launched by the CI
+    required: false
+outputs:
+  application-id:
+    description: The ID of the application being set up
+    value: ${{ steps.save-application.outputs.application-id }} 
+  application-name:
+    description: The name of the application being set up
+    value: ${{ steps.save-application.outputs.application-name }}
+  application-path:
+    description: The path to the applications within the repository
+    value: ${{ steps.save-application.outputs.application-path }}
+  build-id:
+    description: The ID of the build launched by the CI
+    value: ${{ inputs.build-id || steps.create-build.outputs.id }}
+runs:
+  using: composite
+  steps:
+    - if: ${{ inputs.status == 'pending' }}
+      name: Get nullplatform application
+      id: get-application
+      uses: nullplatform/github-action-metadata@v1
+      with:
+        resource: application
+    - if: ${{ inputs.status == 'pending' }}
+      name: Save application into build context
+      id: save-application
+      shell: bash
+      run: |
+        echo "application-id=${{ fromJson(steps.get-application.outputs.metadata)[0].id }}" >> "$GITHUB_OUTPUT"
+        echo "application-name=${{ fromJson(steps.get-application.outputs.metadata)[0].name }}" >> "$GITHUB_OUTPUT"
+        echo "application-path=${{ fromJson(steps.get-application.outputs.metadata)[0].code_repository_app_path }}" >> "$GITHUB_OUTPUT"
+    - if: ${{ inputs.status == 'pending' }}
+      name: Create build for ${{ steps.save-application.outputs.application-name }}
+      id: create-build
+      uses: nullplatform/github-action-build@v1
+      with:
+        action: create
+        status: in-progress
+        application-id: ${{ steps.save-application.outputs.application-id }}
+    - if: ${{ inputs.build-id }}
+      name: Update build '#'${{ inputs.build-id }}
+      id: update-build
+      uses: nullplatform/github-action-build@v1
+      with:
+        action: update
+        id: ${{ inputs.build-id }}
+        status: ${{ inputs.status }}

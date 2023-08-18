@@ -1,0 +1,62 @@
+name: Setup CI
+description: This is a GitHub Action designed to automate the CI setup for Nullplatform
+inputs:
+  api-key:
+    description: The API key required for authentication
+    required: false
+  status:
+    description: The status to set for the CI setup
+    required: false
+    default: pending
+  monorepo:
+    description: Indicates if the repository follows a monorepo structure
+    required: false
+    default: false
+  applications-path:
+    description: The path to the applications within the repository
+    required: false
+  application-id:
+    description: The ID of the application being set up
+    required: false
+  build-id:
+    description: The ID of the build launched by the CI
+    required: false
+outputs:
+  application-id: 
+    description: The ID of the application being set up
+    value: ${{ steps.ci-setup.outputs.application-id }}  
+  application-name:
+    description: The name of the application being set up
+    value: ${{ steps.ci-setup.outputs.application-name }}
+  application-path:
+    description: The path to the applications within the repository
+    value: ${{ steps.ci-setup.outputs.application-path }}
+  build-id:
+    description: The ID of the build launched by the CI
+    value: ${{ steps.ci-setup.outputs.build-id }} 
+  applications:
+    description: The applications to being set up
+    value: ${{ steps.ci-setup-multiple.outputs.applications }}
+runs:
+  using: composite
+  steps:
+    - if: ${{ !env.NULLPLATFORM_ACCESS_TOKEN }}
+      name: Log into nullplatform
+      id: login
+      uses: nullplatform/github-action-login@v1
+      with:
+        api-key: ${{ inputs.api-key }}
+    - if: ${{ inputs.monorepo == 'true' }}
+      name: Setup CI for multiples application
+      id: ci-setup-multiple
+      uses: nullplatform/github-action-setup-ci/multi-application@main
+      with:
+        applications-path: ${{ inputs.applications-path }}
+    - if: ${{ inputs.monorepo != 'true' }}
+      name: Setup CI for application
+      id: ci-setup
+      uses: nullplatform/github-action-setup-ci/single-application@main
+      with:
+        status: ${{ inputs.status }}
+        build-id: ${{ inputs.build-id }}
+

@@ -1,0 +1,19 @@
+name: Setup CI Multiple Applications
+description: This is a GitHub Action designed to automate the CI setup for multiple applications per repository
+inputs:
+  applications-path:
+    description: The path to the applications within the repository
+    required: false
+outputs:
+  applications:
+    description: The applications to being set up
+    value: ${{ steps.get-applications.outputs.metadata }}
+runs:
+  using: composite
+  steps:
+    - name: Get nullplatform applications
+      id: get-applications
+      uses: nullplatform/github-action-metadata@v1
+      with:
+        resource: application
+        code-repository-application-path: ${{ inputs.applications-path }}
