@@ -22,6 +22,9 @@ inputs:
     description: The ID of the build launched by the CI
     required: false
 outputs:
+  access-token:
+    description: The access token required to use another Nullplatform actions
+    value: ${{ steps.login.outputs.access-token }}
   application-id:
     description: The ID of the application being set up
     value: ${{ steps.ci-setup.outputs.application-id }}
@@ -36,7 +39,7 @@ outputs:
     value: ${{ steps.ci-setup.outputs.build-id }}
   applications:
     description: The applications to being set up
-    value: ${{ steps.ci-setup-multiple.outputs.applications }}
+    value: ${{ steps.ci-setup-multiple.outputs.applications || env.NULLPLATFORM_ACCESS_TOKEN }}
 runs:
   using: composite
   steps:
