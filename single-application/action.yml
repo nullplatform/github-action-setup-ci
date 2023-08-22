@@ -10,7 +10,7 @@ inputs:
 outputs:
   application-id:
     description: The ID of the application being set up
-    value: ${{ steps.save-application.outputs.application-id }} 
+    value: ${{ steps.save-application.outputs.application-id }}
   application-name:
     description: The name of the application being set up
     value: ${{ steps.save-application.outputs.application-name }}
@@ -43,13 +43,12 @@ runs:
       uses: nullplatform/github-action-build@v1
       with:
         action: create
-        status: in-progress
+        status: pending
         application-id: ${{ steps.save-application.outputs.application-id }}
-    - if: ${{ inputs.build-id }}
-      name: Update build '#'${{ inputs.build-id }}
+    - name: Update build '#'${{ inputs.build-id || steps.create-build.outputs.build-id }}
       id: update-build
       uses: nullplatform/github-action-build@v1
       with:
         action: update
-        id: ${{ inputs.build-id }}
-        status: ${{ inputs.status }}
+        id: ${{ inputs.build-id || steps.create-build.outputs.build-id }}
+        status: ${{ inputs.status || 'in-progress' }}
