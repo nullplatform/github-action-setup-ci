@@ -50,5 +50,5 @@ runs:
       uses: nullplatform/github-action-build@v1
       with:
         action: update
-        id: ${{ inputs.build-id || steps.create-build.outputs.build-id }}
-        status: ${{ inputs.status || 'in-progress' }}
+        id: ${{ inputs.build-id || steps.create-build.outputs.id }}
+        status: ${{ inputs.status == 'pending' && 'in-progress' || inputs.status }}
