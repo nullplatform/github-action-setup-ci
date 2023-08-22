@@ -51,4 +51,4 @@ runs:
       with:
         action: update
         id: ${{ inputs.build-id || steps.create-build.outputs.id }}
-        status: ${{ inputs.status == 'pending' && 'in-progress' || inputs.status }}
+        status: ${{ inputs.status == 'pending' && 'in_progress' || inputs.status }}
