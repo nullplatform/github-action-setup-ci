@@ -7,6 +7,9 @@ inputs:
   build-id:
     description: The ID of the build launched by the CI
     required: false
+  application-id:
+    description: The ID of the application being set up
+    required: false
 outputs:
   application-id:
     description: The ID of the application being set up
@@ -23,13 +26,13 @@ outputs:
 runs:
   using: composite
   steps:
-    - if: ${{ inputs.status == 'pending' }}
+    - if: ${{ inputs.status == 'pending' && inputs.application-id == '' }}
       name: Get nullplatform application
       id: get-application
       uses: nullplatform/github-action-metadata@v1
       with:
         resource: application
-    - if: ${{ inputs.status == 'pending' }}
+    - if: ${{ inputs.status == 'pending' && inputs.application-id == '' }}
       name: Save application into build context
       id: save-application
       shell: bash
@@ -38,13 +41,13 @@ runs:
         echo "application-name=${{ fromJson(steps.get-application.outputs.metadata)[0].name }}" >> "$GITHUB_OUTPUT"
         echo "application-path=${{ fromJson(steps.get-application.outputs.metadata)[0].code_repository_app_path }}" >> "$GITHUB_OUTPUT"
     - if: ${{ inputs.status == 'pending' }}
-      name: Create build for ${{ steps.save-application.outputs.application-name }}
+      name: Create build for application ${{ steps.save-application.outputs.application-name || inputs.application-id  }}
       id: create-build
       uses: nullplatform/github-action-build@v1
       with:
         action: create
         status: pending
-        application-id: ${{ steps.save-application.outputs.application-id }}
+        application-id: ${{ steps.save-application.outputs.application-id || inputs.application-id }}
     - name: Update build '#'${{ inputs.build-id || steps.create-build.outputs.build-id }}
       id: update-build
       uses: nullplatform/github-action-build@v1

@@ -59,4 +59,5 @@ runs:
       with:
         status: ${{ inputs.status }}
         build-id: ${{ inputs.build-id }}
+        application-id: ${{ inputs.application-id }}
 
