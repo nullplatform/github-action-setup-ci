@@ -15,6 +15,7 @@ The "Setup CI" GitHub Actions suite provides a set of actions designed to automa
 ## Table of Contents
 
 - [Inputs](#inputs)
+- [Outputs](#outputs)
 - [Usage](#usage)
   - [Use Case: Setup CI for a Single Application](#use-case-setup-ci-for-a-single-application)
   - [Use Case: Setup CI for Multiple Applications (Monorepo)](#use-case-setup-ci-for-multiple-applications-monorepo)
@@ -46,6 +47,28 @@ The "Setup CI" GitHub Actions suite provides a set of actions designed to automa
 
 - **Description**: The ID of the application being set up. (Optional)
 - **Required**: No
+
+## Outputs
+
+### `application-id`
+
+- **Description**: The ID of the application being set up. Only if `monorepo` flag is set to `false`
+
+### `application-name`
+
+- **Description**: The name of the application being set up. Only if `monorepo` flag is set to `false`
+
+### `application-path`
+
+- **Description**: The path to the applications within the repository. Only if `monorepo` flag is set to `false`
+
+### `build-id`
+
+- **Description**: The ID of the build launched by the CI. Only if `monorepo` flag is set to `false`
+
+### `applications`
+
+- **Description**: The applications being set up. Only if `monorepo` flag is set to `true`
 
 ## Usage
 
