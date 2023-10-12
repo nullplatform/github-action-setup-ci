@@ -50,25 +50,29 @@ The "Setup CI" GitHub Actions suite provides a set of actions designed to automa
 
 ## Outputs
 
+If `monorepo` flag is set to `false`
+
 ### `application-id`
 
-- **Description**: The ID of the application being set up. Only if `monorepo` flag is set to `false`
+- **Description**: The ID of the application being set up.
 
 ### `application-name`
 
-- **Description**: The name of the application being set up. Only if `monorepo` flag is set to `false`
+- **Description**: The name of the application being set up.
 
 ### `application-path`
 
-- **Description**: The path to the applications within the repository. Only if `monorepo` flag is set to `false`
+- **Description**: The path to the applications within the repository.
 
 ### `build-id`
 
-- **Description**: The ID of the build launched by the CI. Only if `monorepo` flag is set to `false`
+- **Description**: The ID of the build launched by the CI.
+
+Otherwise, if `monorepo` flag is set to `true`
 
 ### `applications`
 
-- **Description**: The applications being set up. Only if `monorepo` flag is set to `true`
+- **Description**: The applications being set up.
 
 ## Usage
 
